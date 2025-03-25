@@ -1,15 +1,14 @@
+package pb.art5019.calc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Sistema implements Matematica{
 	
-	static String operacao[] = {"4","/","2","*","3","*","11","*","5","-","4"};
-	static List<String> operadores = new ArrayList<>();
-	static List<Integer> numeros = new ArrayList<>();
-	static List<Boolean> checks = new ArrayList<>();
-	static String refoperadores = "+-*/";
-	
-	public static void main(String[] args) {
+	String operacao[] = {"4","/","2","*","3","*","11","*","5","-","4"};
+	List<String> operadores = new ArrayList<>();
+	List<Integer> numeros = new ArrayList<>();
+	List<Boolean> checks = new ArrayList<>();	
+	public void calcula() {
 		
 		//Garante que todos os checks são falsos
 		for(int i = 0;i<4;i++) {
@@ -17,13 +16,13 @@ public class Main {
 		}
 		
 		//Separa a Operação em Operadores e Números
-		for (String atual : operacao) {
+		/*for (String atual : operacao) {
 			if(refoperadores.contains(atual)) {
 				operadores.add(atual);
 			}else {
 				numeros.add(Integer.parseInt(atual));
 			}
-		}
+		}*/
 		
 		System.out.println(mostraAConta());
 		
@@ -35,10 +34,10 @@ public class Main {
 				int tempcalc = 0;
 				if(operadores.get(i).equals("/")) {
 					tempcalc = numeros.get(i)/numeros.get(i+1);
-					dis = calcula(i,tempcalc,dis);
+					dis = opera(i,tempcalc,dis);
 				}else if(operadores.get(i).equals("*")) {
 					tempcalc = numeros.get(i)*numeros.get(i+1);
-					dis = calcula(i,tempcalc,dis);
+					dis = opera(i,tempcalc,dis);
 				}
 				i = i - dis;
 			}
@@ -47,10 +46,10 @@ public class Main {
 				dis = 0;
 				if(operadores.get(i).equals("+")) {
 					tempcalc = numeros.get(i)+numeros.get(i+1);
-					dis = calcula(i,tempcalc,dis);
+					dis = opera(i,tempcalc,dis);
 				}else if(operadores.get(i).equals("-")) {
 					tempcalc = numeros.get(i)-numeros.get(i+1);
-					dis = calcula(i,tempcalc,dis);
+					dis = opera(i,tempcalc,dis);
 				}
 				i = i - dis;
 			}
@@ -58,14 +57,15 @@ public class Main {
 		
 	}
 	
-	public static int calcula(int pos, int res, int dis) {
+	public int opera(int pos, int res, int dis) {
 		numeros.set(pos, res);
 		numeros.remove(pos+1);
 		operadores.remove(pos);
 		System.out.println(mostraAConta());
 		return dis+1;
 	}
-	public static String mostraAConta() {
+	
+	public String mostraAConta() {
 		String conta;
 		conta = numeros.get(0).toString();
 		for (int i = 0;i<operadores.size();i++) {
