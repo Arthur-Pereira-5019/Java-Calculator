@@ -9,22 +9,29 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Menu extends Sistema implements ActionListener{
-	JFrame calc = new JFrame();
+public class Menu extends Calculator implements ActionListener{
+	JFrame calc = new JFrame("Art5019's Calculator");
 	List<JButton> buttons = new ArrayList<>();
 	int nextJump = 0;
-	int linha = 0;
-	int coluna = 0;
-	int operacao = 0;
-	String toCalc = "";
-	boolean criandoNumero = false;
+	int row = 0;
+	int column = 0;
+	int operation = 0;
+	String toDisplay = "";
+	boolean isCreatingNumber = false;
+	JLabel display = new JLabel();
 	
 	List<Character> operands = new ArrayList<>();
 
 	
-	void abricACalc() {
-		for(int i = 0; i < refoperadores.length();i++) {
-			operands.add(refoperadores.charAt(i));
+	void openTheCalc() {
+		buildTheCalculator();
+		buildTheButtons();
+	}
+
+	
+	void buildTheCalculator() {
+		for(int i = 0; i < operatorsReference.length();i++) {
+			operands.add(operatorsReference.charAt(i));
 		}
 		
 		for(int i = 0;i<10;i++) {
@@ -34,23 +41,23 @@ public class Menu extends Sistema implements ActionListener{
 			buttons.add(new JButton(""+operands.get(i)));
 		}
 		buttons.add(new JButton("="));
+		buttons.add(new JButton("<-"));
 		
 		for(int i = 0;i<buttons.size();i++) {
-			coluna++;
+			column++;
 			if(nextJump == 0) {
-				linha++;
-				coluna = 0;
+				row++;
+				column = 0;
 				nextJump = 4;
 			}
-			buttons.get(i).setBounds(20+coluna*90,80+linha*80,80,75);
+			buttons.get(i).setBounds(20+column*90,80+row*80,80,75);
 			buttons.get(i).addActionListener(this);
 			calc.add(buttons.get(i));
 			nextJump--;
 		}
-		JLabel mostrador = new JLabel();
-		mostrador.setText(toCalc);
-		mostrador.setBounds(100,0,200,200);
-		calc.add(mostrador);
+		display.setText(toDisplay);
+		display.setBounds(100,0,200,200);
+		calc.add(display);
 		
 		calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		calc.setSize(400,600);
@@ -58,41 +65,43 @@ public class Menu extends Sistema implements ActionListener{
 		calc.setVisible(true);
 		calc.setResizable(false);
 		calc.setLocationRelativeTo(null);
-		
+	}
+	
+	void buildTheButtons() {
 		for (JButton botao : buttons) {
 			botao.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e ) {
-					if(refoperadores.contains(botao.getText()) && refoperadores.contains(toCalc.substring(toCalc.length()-1))) {
-						toCalc = toCalc.substring(0,toCalc.length()-1) + botao.getText();
+					if(operatorsReference.contains(botao.getText()) && operatorsReference.contains(toDisplay.substring(toDisplay.length()-1))) {
+						toDisplay = toDisplay.substring(0,toDisplay.length()-1) + botao.getText();
+						display.setText(toDisplay);
 					}else if(botao.getText() == "=") {
-						System.out.println("Operação finalizada, enviar para o módulo de calcular.");
-						calcula();
+						toDisplay = ((Integer) calculate()).toString();
+						operation = 1;
 					}
 					else {
-						if(algarismos.contains(botao.getText())) {
-							if(criandoNumero == false) {
-								criandoNumero = true;
-								numeros.add(Integer.parseInt(botao.getText()));
-								operacao++;
+						if(digits.contains(botao.getText())) {
+							if(isCreatingNumber == false) {
+								isCreatingNumber = true;
+								numbers.add(Integer.parseInt(botao.getText()));
+								operation++;
 							}else {
-								numeros.set(operacao, Integer.parseInt(numeros.get(operacao)+botao.getText()));
+								System.out.println(operation-1);
+								numbers.set(operation-1, Integer.parseInt(numbers.get(operation-1)+botao.getText()));
 							}
 						}else {
-							if(criandoNumero = true) {
-								criandoNumero = false;
+							if(isCreatingNumber = true) {
+								isCreatingNumber = false;
 							}
-							operadores.add(botao.getText());
+							operators.add(botao.getText());
 						}
-						toCalc = toCalc+botao.getText();
+						toDisplay = toDisplay+botao.getText();
+						display.setText(toDisplay);
 					}
-					System.out.println(toCalc);
-					mostrador.setText(toCalc);
+					display.setText(toDisplay);
 					calc.repaint();
 				}
 			});
 		}
-	
-	
 	}
 
 
