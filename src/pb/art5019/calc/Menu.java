@@ -77,8 +77,24 @@ public class Menu extends Calculator implements ActionListener{
 					}else if(botao.getText() == "=") {
 						toDisplay = ((Integer) calculate()).toString();
 						operation = 1;
-					}
-					else {
+					}else if (botao.getText() == "<-") {
+						String using = numbers.get(numbers.size()-1).toString();
+						if(isCreatingNumber) {
+							if(using.length() > 1) {
+								numbers.set(numbers.size()-1, Integer.parseInt(using.substring(0,using.length())));
+							}else {
+								numbers.remove(numbers.size()-1);
+								if(numbers.size() > 0) {
+									isCreatingNumber = false;
+								}else {
+									isCreatingNumber = true;
+								}
+							}
+						}else {
+							operators.remove(operators.size());
+							isCreatingNumber = true;
+						}
+					}else {
 						if(digits.contains(botao.getText())) {
 							if(isCreatingNumber == false) {
 								isCreatingNumber = true;
@@ -97,7 +113,7 @@ public class Menu extends Calculator implements ActionListener{
 						toDisplay = toDisplay+botao.getText();
 						display.setText(toDisplay);
 					}
-					display.setText(toDisplay);
+					display.setText(showTheCalculation());
 					calc.repaint();
 				}
 			});

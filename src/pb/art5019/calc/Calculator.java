@@ -50,12 +50,20 @@ public class Calculator implements Mathematics{
 	
 	public String showTheCalculation() {
 		String calculation;
-		calculation = numbers.get(0).toString();
-		for (int i = 0;i<operators.size();i++) {
-			calculation = calculation + operators.get(i);
-			calculation = calculation + numbers.get(i+1).toString();
+		if(numbers.size() > 0) {
+			calculation = numbers.get(0).toString();
+			if(operators.size() > 0) {
+				calculation = numbers.get(0).toString();
+				for (int i = 0;i<operators.size();i++) {
+					calculation = calculation + operators.get(i);
+					if (numbers.size() == i) {
+						calculation = calculation + numbers.get(i+1).toString();
+					}
+				}
+			}
+			return calculation;
 		}
-		return calculation;
+		return "0";
 		
 	}
 
