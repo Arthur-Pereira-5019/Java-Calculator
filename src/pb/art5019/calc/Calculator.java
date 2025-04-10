@@ -1,3 +1,4 @@
+
 package pb.art5019.calc;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,21 +51,30 @@ public class Calculator implements Mathematics{
 	
 	public String showTheCalculation() {
 		String calculation;
+		
+		//If there are numbers
 		if(numbers.size() > 0) {
+			System.out.println("Tem números: "+numbers.size());
+			System.out.println("Tem operadores:"+operators.size());
 			calculation = numbers.get(0).toString();
+			//If there are operators
 			if(operators.size() > 0) {
 				calculation = numbers.get(0).toString();
+				//Foreach operator
 				for (int i = 0;i<operators.size();i++) {
+					//Add the operator
 					calculation = calculation + operators.get(i);
-					if (numbers.size() == i) {
-						calculation = calculation + numbers.get(i+1).toString();
+					if(numbers.size() > i+1) {
+						calculation = calculation + numbers.get(i+1);
+					}else {
+						break;
 					}
+					
 				}
+				return calculation;
 			}
 			return calculation;
 		}
-		return "0";
-		
+			return "";
 	}
-
 }
