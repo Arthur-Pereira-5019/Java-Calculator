@@ -54,8 +54,6 @@ public class Calculator implements Mathematics{
 		
 		//If there are numbers
 		if(numbers.size() > 0) {
-			System.out.println("Tem números: "+numbers.size());
-			System.out.println("Tem operadores:"+operators.size());
 			calculation = numbers.get(0).toString();
 			//If there are operators
 			if(operators.size() > 0) {

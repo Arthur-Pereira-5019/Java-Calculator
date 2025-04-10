@@ -78,20 +78,18 @@ public class Menu extends Calculator implements ActionListener{
 						toDisplay = ((Integer) calculate()).toString();
 						operation = 1;
 					}else if (botao.getText() == "<-") {
-						String using = numbers.get(numbers.size()-1).toString();
 						if(isCreatingNumber) {
+							String using = numbers.get(numbers.size()-1).toString();
 							if(using.length() > 1) {
-								numbers.set(numbers.size()-1, Integer.parseInt(using.substring(0,using.length())));
+								System.out.println("1");
+								numbers.set(numbers.size()-1, Integer.parseInt(using.substring(0,using.length()-1)));
 							}else {
 								numbers.remove(numbers.size()-1);
-								if(numbers.size() > 0) {
-									isCreatingNumber = false;
-								}else {
-									isCreatingNumber = true;
-								}
+								isCreatingNumber = false;
+								System.out.println("2");
 							}
 						}else {
-							operators.remove(operators.size());
+							operators.remove(operators.size()-1);
 							isCreatingNumber = true;
 						}
 					}else {
