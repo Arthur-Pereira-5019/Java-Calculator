@@ -1,78 +1,106 @@
 
 package pb.art5019.calc;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calculator implements Mathematics{
-	
+public class Calculator implements Mathematics {
+
 	List<String> operators = new ArrayList<>();
-	List<Integer> numbers = new ArrayList<>();
-	
-	public int calculate() {
+	Numbers numbers = new Numbers();
+	boolean isCreatingNumber = false;
+	int operation = 0;
+
+	public double calculate() {
 		System.out.println(showTheCalculation());
-		while(operators.size() > 0) {
+		while (operators.size() > 0) {
 			int dis = 0;
-			for(int i = 0;i<operators.size();i++) {
+			for (int i = 0; i < operators.size(); i++) {
 				dis = 0;
-				int tempcalc = 0;
-				if(operators.get(i).equals("/")) {
-					tempcalc = numbers.get(i)/numbers.get(i+1);
-					dis = updateTheCalculation(i,tempcalc,dis);
-				}else if(operators.get(i).equals("*")) {
-					tempcalc = numbers.get(i)*numbers.get(i+1);
-					dis = updateTheCalculation(i,tempcalc,dis);
+				double tempcalc = 0;
+				if (operators.get(i).equals("/")) {
+					tempcalc = numbers.get(i) / numbers.get(i + 1);
+					dis = updateTheCalculation(i, tempcalc, dis);
+				} else if (operators.get(i).equals("*")) {
+					tempcalc = numbers.get(i) * numbers.get(i + 1);
+					dis = updateTheCalculation(i, tempcalc, dis);
 				}
 				i = i - dis;
 			}
-			for(int i = 0;i<operators.size();i++) {
-				int tempcalc = 0;
+			for (int i = 0; i < operators.size(); i++) {
+				double tempcalc = 0;
 				dis = 0;
-				if(operators.get(i).equals("+")) {
-					tempcalc = numbers.get(i)+numbers.get(i+1);
-					dis = updateTheCalculation(i,tempcalc,dis);
-				}else if(operators.get(i).equals("-")) {
-					tempcalc = numbers.get(i)-numbers.get(i+1);
-					dis = updateTheCalculation(i,tempcalc,dis);
+				if (operators.get(i).equals("+")) {
+					tempcalc = numbers.get(i) + numbers.get(i + 1);
+					dis = updateTheCalculation(i, tempcalc, dis);
+				} else if (operators.get(i).equals("-")) {
+					tempcalc = numbers.get(i) - numbers.get(i + 1);
+					dis = updateTheCalculation(i, tempcalc, dis);
 				}
 				i = i - dis;
 			}
 		}
 		return numbers.get(0);
-		
+
 	}
-	
-	public int updateTheCalculation(int pos, int res, int dis) {
+
+	public int updateTheCalculation(int pos, double res, int dis) {
 		numbers.set(pos, res);
-		numbers.remove(pos+1);
+		numbers.remove(pos + 1);
 		operators.remove(pos);
 		System.out.println(showTheCalculation());
-		return dis+1;
+		return dis + 1;
 	}
-	
+
 	public String showTheCalculation() {
 		String calculation;
-		
-		//If there are numbers
-		if(numbers.size() > 0) {
-			calculation = numbers.get(0).toString();
-			//If there are operators
-			if(operators.size() > 0) {
-				calculation = numbers.get(0).toString();
-				//Foreach operator
-				for (int i = 0;i<operators.size();i++) {
-					//Add the operator
-					calculation = calculation + operators.get(i);
-					if(numbers.size() > i+1) {
-						calculation = calculation + numbers.get(i+1);
-					}else {
-						break;
-					}
-					
-				}
-				return calculation;
-			}
-			return calculation;
-		}
+		if (numbers.size() <= 0) {
 			return "";
+		}
+		if (operators.size() <= 0) {
+			return numbers.getString(0);
+		}
+		calculation = numbers.getString(0);
+		for (int i = 0; i < operators.size(); i++) {
+			calculation = calculation + operators.get(i);
+			if (numbers.size() > i + 1) {
+				calculation = calculation + numbers.get(i + 1);
+			} else {
+				break;
+			}
+		}
+		return calculation;
+	}
+
+	public void manipulateNumbers(String button) {
+		if (operatorsReference.contains(button)) {
+			if (numbers.size() > operators.size()) {
+				operators.add(button);
+				isCreatingNumber = false;
+			} else {
+				operators.set(operators.size(), button);
+			}
+		} else if (button == "=") {
+			calculate();
+		} else if (button == "<-") {
+			operation = numbers.size() - 1;
+			if (isCreatingNumber) {
+				numbers.trimming();
+				if (numbers.isNull() || numbers.isSize(operation)) {
+					isCreatingNumber = false;
+				}
+			} else {
+				operators.remove(operators.size() - 1);
+				isCreatingNumber = true;
+			}
+		} else {
+			if (isCreatingNumber == false) {
+				isCreatingNumber = true;
+				numbers.add(button);
+				operation++;
+			} else {
+				numbers.insertBetween(operation - 1, button);
+			}
+		}
 	}
 }

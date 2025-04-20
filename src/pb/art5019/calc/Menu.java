@@ -16,7 +16,7 @@ public class Menu extends Calculator implements ActionListener{
 	int row = 0;
 	int column = 0;
 	int operation = 0;
-	String toDisplay = "";
+	String toDisplay = "Welcome to Art5019's Calculator";
 	boolean isCreatingNumber = false;
 	JLabel display = new JLabel();
 	
@@ -57,8 +57,7 @@ public class Menu extends Calculator implements ActionListener{
 		}
 		display.setText(toDisplay);
 		display.setBounds(100,0,200,200);
-		calc.add(display);
-		
+		calc.add(display);	
 		calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		calc.setSize(400,600);
 		calc.setLayout(null);
@@ -70,47 +69,9 @@ public class Menu extends Calculator implements ActionListener{
 	void buildTheButtons() {
 		for (JButton botao : buttons) {
 			botao.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e ) {
-					if(operatorsReference.contains(botao.getText()) && operatorsReference.contains(toDisplay.substring(toDisplay.length()-1))) {
-						toDisplay = toDisplay.substring(0,toDisplay.length()-1) + botao.getText();
-						display.setText(toDisplay);
-					}else if(botao.getText() == "=") {
-						toDisplay = ((Integer) calculate()).toString();
-						operation = 1;
-					}else if (botao.getText() == "<-") {
-						if(isCreatingNumber) {
-							String using = numbers.get(numbers.size()-1).toString();
-							if(using.length() > 1) {
-								System.out.println("1");
-								numbers.set(numbers.size()-1, Integer.parseInt(using.substring(0,using.length()-1)));
-							}else {
-								numbers.remove(numbers.size()-1);
-								isCreatingNumber = false;
-								System.out.println("2");
-							}
-						}else {
-							operators.remove(operators.size()-1);
-							isCreatingNumber = true;
-						}
-					}else {
-						if(digits.contains(botao.getText())) {
-							if(isCreatingNumber == false) {
-								isCreatingNumber = true;
-								numbers.add(Integer.parseInt(botao.getText()));
-								operation++;
-							}else {
-								System.out.println(operation-1);
-								numbers.set(operation-1, Integer.parseInt(numbers.get(operation-1)+botao.getText()));
-							}
-						}else {
-							if(isCreatingNumber = true) {
-								isCreatingNumber = false;
-							}
-							operators.add(botao.getText());
-						}
-						toDisplay = toDisplay+botao.getText();
-						display.setText(toDisplay);
-					}
+					manipulateNumbers(botao.getText());
 					display.setText(showTheCalculation());
 					calc.repaint();
 				}
@@ -121,7 +82,6 @@ public class Menu extends Calculator implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
