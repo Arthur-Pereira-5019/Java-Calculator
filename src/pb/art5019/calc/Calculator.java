@@ -57,14 +57,16 @@ public class Calculator implements Mathematics {
 		if (numbers.size() <= 0) {
 			return "";
 		}
-		if (operators.size() <= 0) {
-			return numbers.getString(0);
-		}
-		calculation = numbers.getString(0);
+		calculation = numbers.getDisplay(0);
 		for (int i = 0; i < operators.size(); i++) {
 			calculation = calculation + operators.get(i);
 			if (numbers.size() > i + 1) {
-				calculation = calculation + numbers.get(i + 1);
+				if(numbers.isFloat(i + 1)) {
+					calculation = calculation + numbers.getDisplay(i + 1);
+				}else {
+					calculation = calculation + numbers.getDisplay(i + 1);
+				}
+				
 			} else {
 				break;
 			}
@@ -93,13 +95,15 @@ public class Calculator implements Mathematics {
 				operators.remove(operators.size() - 1);
 				isCreatingNumber = true;
 			}
-		} else {
+		} else if(button == ".") {
+			numbers.setFloat(operation-1);
+		}else {
 			if (isCreatingNumber == false) {
 				isCreatingNumber = true;
 				numbers.add(button);
 				operation++;
 			} else {
-				numbers.insertBetween(operation - 1, button);
+				numbers.insert(operation - 1, button);
 			}
 		}
 	}

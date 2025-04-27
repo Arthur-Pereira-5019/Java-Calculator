@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Numbers implements Mathematics{
 	private List<Double> numbers = new ArrayList<>();
+	private List<Boolean> dotMarkers = new ArrayList<>();
+	private List<Boolean> firstDecimal = new ArrayList<>();
 	
 	public String getBeforeDot(int pos) {
 		String t = getString(pos);
@@ -48,14 +50,39 @@ public class Numbers implements Mathematics{
 	
 	public void add(Double toAdd) {
 		numbers.add(toAdd);
+		dotMarkers.add(false);
 	}
 	
 	public void add(String toAdd) {
 		numbers.add(Double.parseDouble(toAdd));
+		dotMarkers.add(false);
+		firstDecimal.add(false);
 	}
 	
 	public void insertBetween(int pos, String toAdd) {
 		set(pos, Double.parseDouble(getBeforeDot(pos) + toAdd + getAfterDot(pos)));
+	}
+	
+	public void insert(int pos, String toAdd) {
+		if(dotMarkers.get(pos) == true) {
+			if(firstDecimal.get(pos) == false) {
+				numbers.set(pos, Double.parseDouble(getBeforeDot(pos) + "." + toAdd));
+				firstDecimal.set(pos, true);
+			}else {
+				insertAfter(pos, toAdd);
+			}
+			
+		}else {
+			insertBetween(pos, toAdd);
+		}
+	}
+	
+	public void setFloat(int pos) {
+		dotMarkers.set(pos, true);
+	}
+	
+	public void insertAfter(int pos, String toAdd) {
+		set(pos, Double.parseDouble(getBeforeDot(pos) + getAfterDot(pos) + toAdd));
 	}
 	
 	public String getLastElementString() {
@@ -80,6 +107,20 @@ public class Numbers implements Mathematics{
 	
 	public boolean isSize(int size) {
 		return size == size();
+	}
+	
+	public boolean isFloat(int pos) {
+		return dotMarkers.get(pos);
+	}
+	
+	public String getDisplay(int pos) {
+		if(isFloat(pos)) {
+			if(firstDecimal.get(pos)) {
+				return getString(pos);
+			}
+			return getBeforeDot(pos)+".";
+		}
+		return getBeforeDot(pos);
 	}
 
 }

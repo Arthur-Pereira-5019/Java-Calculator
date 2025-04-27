@@ -42,6 +42,10 @@ public class Menu extends Calculator implements ActionListener{
 		}
 		buttons.add(new JButton("="));
 		buttons.add(new JButton("<-"));
+		buttons.add(new JButton("."));
+		buttons.add(new JButton("("));
+		buttons.add(new JButton(")"));
+		buttons.add(new JButton("C"));
 		
 		for(int i = 0;i<buttons.size();i++) {
 			column++;
