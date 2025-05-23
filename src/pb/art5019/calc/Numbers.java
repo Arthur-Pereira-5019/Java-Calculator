@@ -5,8 +5,9 @@ import java.util.List;
 
 public class Numbers implements Mathematics{
 	private List<Double> numbers = new ArrayList<>();
-	private List<Boolean> dotMarkers = new ArrayList<>();
-	private List<Boolean> firstDecimal = new ArrayList<>();
+	
+	private List<Boolean> dotMarkers = new ArrayList<>(); 
+	private List<Boolean> firstDecimal = new ArrayList<>(); //Used for better displaying the number.
 	
 	public String getBeforeDot(int pos) {
 		String t = getString(pos);
@@ -27,6 +28,19 @@ public class Numbers implements Mathematics{
 	}
 	
 	public void set(int pos, double set) {
+		numbers.set(pos, set);
+	}
+	
+	public void set(int pos, double set, boolean isCalculation) {
+		if(isCalculation && numbers.size() == 1) {
+			resetFloatStructure();
+			dotMarkers.add(false);
+			firstDecimal.add(false);
+			if(isInteger(set)) {
+				dotMarkers.add(true);
+				firstDecimal.add(true);
+			}
+		}
 		numbers.set(pos, set);
 	}
 	
@@ -57,6 +71,10 @@ public class Numbers implements Mathematics{
 		numbers.add(Double.parseDouble(toAdd));
 		dotMarkers.add(false);
 		firstDecimal.add(false);
+	}
+	
+	public boolean isInteger(double test) {
+		return (test % 1 == 0);
 	}
 	
 	public void insertBetween(int pos, String toAdd) {
@@ -121,6 +139,11 @@ public class Numbers implements Mathematics{
 			return getBeforeDot(pos)+".";
 		}
 		return getBeforeDot(pos);
+	}
+	
+	public void resetFloatStructure() {
+		dotMarkers.clear();
+		firstDecimal.clear();
 	}
 
 }

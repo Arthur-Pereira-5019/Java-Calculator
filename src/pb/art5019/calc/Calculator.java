@@ -20,6 +20,7 @@ public class Calculator implements Mathematics {
 				double tempcalc = 0;
 				if (operators.get(i).equals("/")) {
 					tempcalc = numbers.get(i) / numbers.get(i + 1);
+					System.out.println(tempcalc);
 					dis = updateTheCalculation(i, tempcalc, dis);
 				} else if (operators.get(i).equals("*")) {
 					tempcalc = numbers.get(i) * numbers.get(i + 1);
@@ -40,12 +41,14 @@ public class Calculator implements Mathematics {
 				i = i - dis;
 			}
 		}
+		operation = 1; // Grants that the next calculation won't try to edit the array out of the last place
 		return numbers.get(0);
 
 	}
 
 	public int updateTheCalculation(int pos, double res, int dis) {
-		numbers.set(pos, res);
+		System.out.println(res);
+		numbers.set(pos, res, true);
 		numbers.remove(pos + 1);
 		operators.remove(pos);
 		System.out.println(showTheCalculation());
