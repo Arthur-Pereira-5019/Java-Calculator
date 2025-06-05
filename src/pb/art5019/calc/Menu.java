@@ -30,6 +30,8 @@ public class Menu extends Calculator implements ActionListener{
 
 	
 	void buildTheCalculator() {
+		
+		
 		for(int i = 0; i < operatorsReference.length();i++) {
 			operands.add(operatorsReference.charAt(i));
 		}
@@ -64,6 +66,9 @@ public class Menu extends Calculator implements ActionListener{
 		calc.add(display);	
 		calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		calc.setSize(400,600);
+		JButton save = new JButton("History");
+		save.setBounds(calc.getWidth()-100, 0, 90, 60);
+		calc.add(save);
 		calc.setLayout(null);
 		calc.setVisible(true);
 		calc.setResizable(false);
