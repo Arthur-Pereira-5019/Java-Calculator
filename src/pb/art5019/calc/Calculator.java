@@ -10,7 +10,7 @@ public class Calculator implements Mathematics {
 	Numbers numbers = new Numbers();
 	boolean isCreatingNumber = false;
 	int operation = 0;
-	HistoryRepository hr = new HistoryRepository("data/history/history.txt");
+	HistoryRepository hr = new HistoryRepository("data/history.txt");
 
 
 	public int updateTheCalculation(int pos, double res, int dis) {
@@ -52,13 +52,15 @@ public class Calculator implements Mathematics {
 			delete(button);
 		} else if(button == ".") {
 			numbers.setFloat(operation-1);
-		}else {
+		} else if(brackets.contains(button)) {
+			addBrackets(button);
+		}
+		else {
 			addNumber(button);
 		}
 	}
 	
 	public double calculate() {
-		//System.out.println(showTheCalculation());
 		String preCalculation = showTheCalculation();
 		while (operators.size() > 0) {
 			int dis = 0;
@@ -104,6 +106,20 @@ public class Calculator implements Mathematics {
 		}
 	}
 	
+	private void addBrackets(String button) {
+		if(operators.size() == numbers.size()) {
+			if(button == "(") {
+				operators.add(button);
+				return;
+			}
+		}else if(operators.size() < numbers.size()) {
+			if(button == ")") {
+				operators.add(button);
+				return;
+			}
+		}
+	}
+	
 	private void delete(String button) {
 		operation = numbers.size() - 1;
 		if (isCreatingNumber) {
@@ -126,4 +142,6 @@ public class Calculator implements Mathematics {
 			numbers.insert(operation - 1, button);
 		}
 	}
+	
+	
 }
