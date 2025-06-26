@@ -15,7 +15,7 @@ public class Calculator implements Mathematics {
 
 	public int updateTheCalculation(int pos, double res, int dis) {
 		System.out.println(res);
-		numbers.set(pos, res, true);
+		numbers.set(pos, String.valueOf(res), true);
 		numbers.remove(pos + 1);
 		operators.remove(pos);
 		System.out.println(showTheCalculation());

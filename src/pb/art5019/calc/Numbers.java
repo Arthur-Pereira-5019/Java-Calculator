@@ -3,7 +3,7 @@ package pb.art5019.calc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Numbers implements Mathematics{
+public class Numbers implements AccountDataInterface{
 	private List<Double> numbers = new ArrayList<>();
 	
 	private List<Boolean> dotMarkers = new ArrayList<>(); 
@@ -27,21 +27,23 @@ public class Numbers implements Mathematics{
 		
 	}
 	
-	public void set(int pos, double set) {
-		numbers.set(pos, set);
+	public void set(int pos, String set) {
+		Double newSet = Double.valueOf(set);
+		numbers.set(pos, newSet);
 	}
 	
-	public void set(int pos, double set, boolean isCalculation) {
+	public void set(int pos, String set, boolean isCalculation) {
+		Double newSet = Double.valueOf(set);
 		if(isCalculation && numbers.size() == 1) {
 			resetFloatStructure();
 			dotMarkers.add(false);
 			firstDecimal.add(false);
-			if(isInteger(set)) {
+			if(isInteger(newSet)) {
 				dotMarkers.add(true);
 				firstDecimal.add(true);
 			}
 		}
-		numbers.set(pos, set);
+		numbers.set(pos, newSet);
 	}
 	
 	public void getList() {
@@ -78,7 +80,7 @@ public class Numbers implements Mathematics{
 	}
 	
 	public void insertBetween(int pos, String toAdd) {
-		set(pos, Double.parseDouble(getBeforeDot(pos) + toAdd + getAfterDot(pos)));
+		set(pos, getBeforeDot(pos) + toAdd + getAfterDot(pos));
 	}
 	
 	public void insert(int pos, String toAdd) {
@@ -100,7 +102,7 @@ public class Numbers implements Mathematics{
 	}
 	
 	public void insertAfter(int pos, String toAdd) {
-		set(pos, Double.parseDouble(getBeforeDot(pos) + getAfterDot(pos) + toAdd));
+		set(pos, getBeforeDot(pos) + getAfterDot(pos) + toAdd);
 	}
 	
 	public String getLastElementString() {
@@ -108,7 +110,7 @@ public class Numbers implements Mathematics{
 	}
 	
 	public void trimElement(int pos) {
-		set(pos, Double.parseDouble(getBeforeDot(pos).substring(0,getBeforeDot(pos).length()-1)));
+		set(pos, getBeforeDot(pos).substring(0,getBeforeDot(pos).length()-1));
 	}
 	
 	public void trimming() {
