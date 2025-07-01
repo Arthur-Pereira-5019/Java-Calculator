@@ -43,9 +43,8 @@ public class Operators implements AccountDataInterface{
 	}
 
 	@Override
-	public double get(int pos) {
-		// TODO Auto-generated method stub
-		return 0;
+	public String get(int pos) {
+		return operators.get(pos);
 	}
 
 	@Override

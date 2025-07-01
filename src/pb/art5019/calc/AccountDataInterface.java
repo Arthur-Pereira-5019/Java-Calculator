@@ -11,7 +11,7 @@ public interface AccountDataInterface extends Mathematics {
 		
 		public void getList();
 		
-		public double get(int pos);
+		public Object get(int pos);
 		
 		public void remove(int pos);
 		

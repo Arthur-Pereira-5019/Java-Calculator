@@ -52,7 +52,7 @@ public class Numbers implements AccountDataInterface{
 		}
 	}
 	
-	public double get(int pos) {
+	public Double get(int pos) {
 		return numbers.get(pos);
 	}
 	
@@ -67,6 +67,7 @@ public class Numbers implements AccountDataInterface{
 	public void add(Double toAdd) {
 		numbers.add(toAdd);
 		dotMarkers.add(false);
+		firstDecimal.add(false);
 	}
 	
 	public void add(String toAdd) {
@@ -146,6 +147,18 @@ public class Numbers implements AccountDataInterface{
 	public void resetFloatStructure() {
 		dotMarkers.clear();
 		firstDecimal.clear();
+	}
+	
+	public void insertReorder(int pos, double toAdd) {
+		numbers.add(0.0);
+		dotMarkers.add(false);
+		firstDecimal.add(false);
+		for(int i = numbers.size()-2; i>=pos;i--) {
+			numbers.set(i+1, numbers.get(i));
+			dotMarkers.set(i+1, dotMarkers.get(i));
+			firstDecimal.set(i+1, firstDecimal.get(i));
+		}
+		numbers.set(pos, toAdd);
 	}
 
 

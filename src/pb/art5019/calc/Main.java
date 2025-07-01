@@ -6,7 +6,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Menu menu = new Menu();
+		/*Menu menu = new Menu();
 		
 		menu.openTheCalc();
 		
@@ -44,7 +44,16 @@ public class Main {
 		
 		
 		
-		System.out.println(account.toString());
+		System.out.println(account.toString());*/
+		
+		Numbers numbers = new Numbers();
+		numbers.add(3.0);
+		numbers.add(7.0);
+		numbers.add(8.0);
+		numbers.insertReorder(1, 15);
+		for(int i = 0; i < numbers.size(); i++) {
+			System.out.println(numbers.get(i));
+		}
 		
 		
 	}
