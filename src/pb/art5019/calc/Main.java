@@ -6,7 +6,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		/*Menu menu = new Menu();
+		Menu menu = new Menu();
 		
 		menu.openTheCalc();
 		
@@ -21,6 +21,7 @@ public class Main {
 		operators.add("+");
 		operators.add("-");
 		operators.add("/");
+		operators.add("*");
 		operators.add("*");
 		operators.add("*");
 		
@@ -41,19 +42,15 @@ public class Main {
 		account.numbers = numbers;
 		account.bracketsAccount = new HashMap<>();
 		account.bracketsAccount.put(1, subaccount1);
+		account.bracketsAccount.put(3, subaccount1);
 		
 		
 		
-		System.out.println(account.toString());*/
+		System.out.println(account.toString());
+		System.out.println(account.calculate());
 		
-		Numbers numbers = new Numbers();
-		numbers.add(3.0);
-		numbers.add(7.0);
-		numbers.add(8.0);
-		numbers.insertReorder(1, 15);
-		for(int i = 0; i < numbers.size(); i++) {
-			System.out.println(numbers.get(i));
-		}
+		
+		
 		
 		
 	}

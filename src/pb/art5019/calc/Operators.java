@@ -20,26 +20,19 @@ public class Operators implements AccountDataInterface{
 
 	@Override
 	public String getString(int pos) {
-		// TODO Auto-generated method stub
-		return null;
+		return operators.get(pos);
 	}
 
 	@Override
 	public void set(int pos, String set) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void set(int pos, String set, boolean isCalculation) {
-		// TODO Auto-generated method stub
-		
+		operators.set(pos, set);
 	}
 
 	@Override
 	public void getList() {
-		// TODO Auto-generated method stub
-		
+		for(String operator: operators) {
+			System.out.println(operator+"\n");
+		}
 	}
 
 	@Override
@@ -49,7 +42,7 @@ public class Operators implements AccountDataInterface{
 
 	@Override
 	public void remove(int pos) {
-		// TODO Auto-generated method stub
+		operators.remove(pos);
 		
 	}
 
@@ -67,20 +60,17 @@ public class Operators implements AccountDataInterface{
 
 	@Override
 	public String getLastElementString() {
-		// TODO Auto-generated method stub
-		return null;
+		return operators.get(operators.size()-1);
 	}
 
 	@Override
 	public boolean isNull() {
-		// TODO Auto-generated method stub
-		return false;
+		return operators.isEmpty();
 	}
 
 	@Override
 	public boolean isSize(int size) {
-		// TODO Auto-generated method stub
-		return false;
+		return size == operators.size();
 	}
 
 }

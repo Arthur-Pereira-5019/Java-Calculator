@@ -6,9 +6,7 @@ public interface AccountDataInterface extends Mathematics {
 		public String getString(int pos);
 		
 		public void set(int pos, String set);
-		
-		public void set(int pos, String set, boolean isCalculation);
-		
+				
 		public void getList();
 		
 		public Object get(int pos);

@@ -7,7 +7,17 @@ public class Account {
 	public Numbers numbers;
 	public Operators operators;
 	public HashMap<Integer,Account> bracketsAccount;
+	public AccountState state;
 	
+	public Account() {
+		state = AccountState.ORIGINAL;
+	}
+	
+	public Account(boolean subAccount) {
+		if(subAccount) {
+			state = AccountState.OPEN;
+		}
+	}
 	
 	public boolean isComplete() {
 		return numbers.size() + bracketsAccount.size() > operators.size();
@@ -23,7 +33,10 @@ public class Account {
 				toReturn.append(operators.getOperator(i+operatorDisplacement));
 				if(bracketsAccount != null) {
 					if(bracketsAccount.containsKey(i)) {
-						toReturn.append("("+bracketsAccount.get(i)+")");
+						toReturn.append("("+bracketsAccount.get(i));
+						if(state == AccountState.CLOSED) {
+							toReturn.append(")");
+						}
 						toReturn.append(operators.getOperator(i+1));
 						operatorDisplacement++;
 					}
@@ -43,29 +56,26 @@ public class Account {
 	}
 	
 	public String calculate() {
-		boolean canReturn = false;
-		while(!canReturn) {
-			if(operators.size() == 0) {
-				canReturn = true;
-			}else {
-				if(bracketsAccount != null) {
+		while(operators.size() > 0) {
+				if(bracketsAccount == null || bracketsAccount.size() == 0) {
+					System.out.println(toString());
+					performCalculations();
+					
+				}else {
 					for(int i = 0; i < numbers.size(); i++) {
 						if(bracketsAccount.containsKey(i)) {
-							Double.valueOf(bracketsAccount.get(i).calculate());
-							
+							Double result = Double.valueOf(bracketsAccount.get(i).calculate());
+							numbers.insertReorder(i+1, result);
+							bracketsAccount.remove(i);
 						}
 					}
 				}
-				
-			}
-			
-			return numbers.getString(0);
 		}
-			
-		return "a";
+		return numbers.getString(0);
 	}
 	
-	public double performCalculations() {
+	public Double performCalculations() {
+
 		while (operators.size() > 0) {
 			int dis = 0;
 			for (int i = 0; i < operators.size(); i++) {
@@ -73,7 +83,6 @@ public class Account {
 				double tempcalc = 0;
 				if (operators.get(i).equals("/")) {
 					tempcalc = numbers.get(i) / numbers.get(i + 1);
-					System.out.println(tempcalc);
 					dis = updateTheArrays(i, tempcalc, dis);
 				} else if (operators.get(i).equals("*")) {
 					tempcalc = numbers.get(i) * numbers.get(i + 1);
@@ -94,14 +103,12 @@ public class Account {
 				i = i - dis;
 			}
 		}
-		
-		
+				
 		return numbers.get(0);
 
 	}
 	
 	public int updateTheArrays(int pos, double res, int dis) {
-		System.out.println(res);
 		numbers.set(pos, String.valueOf(res), true);
 		numbers.remove(pos + 1);
 		operators.remove(pos);
