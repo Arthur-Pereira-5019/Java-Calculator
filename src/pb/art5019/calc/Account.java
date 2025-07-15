@@ -4,13 +4,15 @@ import java.util.HashMap;
 
 public class Account {
 	public int index;
-	public Numbers numbers;
-	public Operators operators;
-	public HashMap<Integer,Account> bracketsAccount;
+	private Numbers numbers;
+	private Operators operators;
+	private HashMap<Integer,Account> bracketsAccount;
 	public AccountState state;
 	
 	public Account() {
 		state = AccountState.ORIGINAL;
+		numbers = new Numbers();
+		operators = new Operators();
 	}
 	
 	public Account(boolean subAccount) {
@@ -47,12 +49,37 @@ public class Account {
 		
 	}
 	
-	public void addNumber(String number) {
-		numbers.add(number);
+	public void addNumber(String number, boolean isCreatingNumber, int operation) {
+		if (isCreatingNumber == false) {
+			getAccountAtPos(size()).numbers.add(number);
+			return;
+		}
+		getAccountAtPos(size()).numbers.insert(operation - 1, number);
 	}
 	
-	public void addOperator(String operator) {
-		operators.add(operator);
+	public boolean addOperator(String operator, boolean isCreatingNumber, int operation) {
+		if (numbers.size() > operators.size()) {
+			operators.add(operator);
+			return false;
+		}
+		operators.set(operators.size(), operator);
+		return true;
+	}
+	
+	public void setFloat(int pos) {
+		numbers.setFloat(pos);
+	}
+	
+	public Account getAccountAtPos(int index) {
+		//By definition, there can't be two open parenthesis at the same level, so you're always at the first OPEN bracketsAccount
+		if(bracketsAccount != null) {
+			for(int i = 0;i<numbers.size();i++) {
+				if(bracketsAccount.get(i).state == AccountState.OPEN) {
+					return bracketsAccount.get(i).getAccountAtPos(bracketsAccount.get(i).size());
+				}
+			}
+		}
+		return this;
 	}
 	
 	public String calculate() {
@@ -74,7 +101,7 @@ public class Account {
 		return numbers.getString(0);
 	}
 	
-	public Double performCalculations() {
+	private Double performCalculations() {
 
 		while (operators.size() > 0) {
 			int dis = 0;
@@ -108,11 +135,15 @@ public class Account {
 
 	}
 	
-	public int updateTheArrays(int pos, double res, int dis) {
+	private int updateTheArrays(int pos, double res, int dis) {
 		numbers.set(pos, String.valueOf(res), true);
 		numbers.remove(pos + 1);
 		operators.remove(pos);
 		return dis + 1;
+	}
+	
+	private int size() {
+		return numbers.size();
 	}
 
 }

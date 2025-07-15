@@ -22,6 +22,10 @@ public class Menu extends Calculator implements ActionListener{
 	
 	List<Character> operands = new ArrayList<>();
 
+
+	public Menu() {
+		super();
+	}
 	
 	void openTheCalc() {
 		buildTheCalculator();
