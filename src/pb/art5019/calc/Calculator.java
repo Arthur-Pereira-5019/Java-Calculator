@@ -29,7 +29,9 @@ public class Calculator implements Mathematics {
 		} else if (button == "=") {
 			baseAccount.calculate();
 		} else if (button == "<-") {
-			delete(button);
+			operation = baseAccount.numbersSize() - 1;
+			isCreatingNumber = baseAccount.delete(button, operation, isCreatingNumber);
+			
 		} else if(button == ".") {
 			baseAccount.setFloat(operation-1);
 		} else if(brackets.contains(button)) {

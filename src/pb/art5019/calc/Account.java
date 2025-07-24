@@ -8,6 +8,7 @@ public class Account {
 	private Operators operators;
 	private HashMap<Integer,Account> bracketsAccount;
 	public AccountState state;
+	private Account owner;
 	
 	public Account() {
 		state = AccountState.ORIGINAL;
@@ -66,6 +67,24 @@ public class Account {
 		return true;
 	}
 	
+	
+	public boolean delete(String button, int operation, boolean isCreatingNumber) {
+		if(getAccountAtPos(operation).size() == 0 && state != AccountState.ORIGINAL) {
+			deleteSelf();
+		}
+		if (isCreatingNumber) {
+			numbers.trimming();
+			if (numbers.isNull() || numbers.isSize(operation)) {
+				return false;
+			}
+		}else {
+			operators.remove(operators.size() - 1);
+			return true;
+		}
+		return isCreatingNumber;
+	}
+	
+	
 	public void setFloat(int pos) {
 		numbers.setFloat(pos);
 	}
@@ -81,7 +100,7 @@ public class Account {
 		}
 		return this;
 	}
-	
+		
 	public String calculate() {
 		while(operators.size() > 0) {
 				if(bracketsAccount == null || bracketsAccount.size() == 0) {
@@ -144,6 +163,18 @@ public class Account {
 	
 	private int size() {
 		return numbers.size();
+	}
+	
+	public int numbersSize() {
+		return numbers.size();
+	}
+	
+	public Account getOwner() {
+		return owner;
+	}
+	
+	public void deleteSelf() {
+		getOwner().bracketsAccount.remove(index);
 	}
 
 }
