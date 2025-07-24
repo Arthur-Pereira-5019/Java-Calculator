@@ -25,28 +25,21 @@ public class Calculator implements Mathematics {
 
 	public void manipulateNumbers(String button) {
 		if (operatorsReference.contains(button)) {
-			isCreatingNumber = baseAccount.addOperator(button, isCreatingNumber, operation);
+			baseAccount.addOperator(button);
 		} else if (button == "=") {
 			baseAccount.calculate();
 		} else if (button == "<-") {
-			operation = baseAccount.numbersSize() - 1;
-			isCreatingNumber = baseAccount.delete(button, operation, isCreatingNumber);
-			
+			baseAccount.delete();
 		} else if(button == ".") {
-			baseAccount.setFloat(operation-1);
+			baseAccount.setFloat();
 		} else if(brackets.contains(button)) {
 			addBrackets(button);
 		}else {
-			baseAccount.addNumber(button, isCreatingNumber, operation);
-			if(!isCreatingNumber) {
-				operation++;
-			}
-			isCreatingNumber = true;
+			baseAccount.addNumber(button);
 			
 		}
 		
 	}
-
 
 	private void addBrackets(String button) {
 		if(operators.size() == numbers.size()) {
@@ -62,22 +55,6 @@ public class Calculator implements Mathematics {
 		}
 	}
 	
-	private void delete(String button) {
-		operation = numbers.size() - 1;
-		if (isCreatingNumber) {
-			numbers.trimming();
-			if (numbers.isNull() || numbers.isSize(operation)) {
-				isCreatingNumber = false;
-			}
-		} else {
-			operators.remove(operators.size() - 1);
-			isCreatingNumber = true;
-		}
-	}
-	
-	private void addNumber(String button) {
-		
-	}
 	
 	
 }
