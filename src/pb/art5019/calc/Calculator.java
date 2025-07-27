@@ -25,7 +25,7 @@ public class Calculator implements Mathematics {
 
 	public void manipulateNumbers(String button) {
 		if (operatorsReference.contains(button)) {
-			baseAccount.addOperator(button);
+			baseAccount.getCurrentAccount().addOperator(button);
 		} else if (button == "=") {
 			baseAccount.calculate();
 		} else if (button == "<-") {
@@ -37,8 +37,7 @@ public class Calculator implements Mathematics {
 		} else if(button == ")") {
 			baseAccount.AddClosingBrackets();
 		}else {
-			baseAccount.addNumber(button);
-			
+			baseAccount.getCurrentAccount().addNumber(button);			
 		}
 		
 	}

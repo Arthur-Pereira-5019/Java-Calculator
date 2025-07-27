@@ -35,10 +35,12 @@ public class Account {
 				if (bracketsAccount != null) {
 					if (bracketsAccount.containsKey(i)) {
 						toReturn.append("(" + bracketsAccount.get(i));
-						if (state == AccountState.CLOSED) {
+						if (bracketsAccount.get(i).state == AccountState.CLOSED) {
 							toReturn.append(")");
 						}
-						toReturn.append(operators.getOperator(i));
+						if(operators.exists(i+1)) {
+							toReturn.append(operators.getOperator(i+i));
+						}
 						operatorDisplacement++;
 					}
 				}
@@ -57,8 +59,8 @@ public class Account {
 	}
 
 	public void addOperator(String operator) {
-		//TODO: Solve it with recursion (also the addNumber();)
-		if (numbers.size() > operators.size()) {
+		int i = bracketsAccount.size();;
+		if (numbers.size() + i > operators.size()) {
 			operators.add(operator);
 			return;
 		}
@@ -67,7 +69,10 @@ public class Account {
 	
 
 	public void delete() {
-		if (getCurrentAccount().size() == 0 && state != AccountState.ORIGINAL) {
+		if(getCurrentAccount().state == AccountState.ORIGINAL && numbers.isNull() && bracketsAccount.isEmpty()) {
+			return;
+		}
+		if (getCurrentAccount().size() == 0 && getCurrentAccount().state != AccountState.ORIGINAL) {
 			deleteSelf();
 			return;
 		}
@@ -102,6 +107,7 @@ public class Account {
 	
 	
 	public void AddOpeningBrackets() {
+		//Maybe size should consider the number of brackets too
 		getCurrentAccount().bracketsAccount.put(size()-1, new Account(true));
 	}
 	
