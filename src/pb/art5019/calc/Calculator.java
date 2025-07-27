@@ -15,7 +15,7 @@ public class Calculator implements Mathematics {
 	Account baseAccount;
 
 	public Calculator() {
-		baseAccount = new Account();
+		baseAccount = new Account(false);
 	}
 
 
@@ -32,8 +32,10 @@ public class Calculator implements Mathematics {
 			baseAccount.delete();
 		} else if(button == ".") {
 			baseAccount.setFloat();
-		} else if(brackets.contains(button)) {
-			addBrackets(button);
+		} else if(button == "(") {
+			baseAccount.AddOpeningBrackets();
+		} else if(button == ")") {
+			baseAccount.AddClosingBrackets();
 		}else {
 			baseAccount.addNumber(button);
 			

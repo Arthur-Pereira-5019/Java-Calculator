@@ -6,20 +6,18 @@ public class Account {
 	public int index;
 	private Numbers numbers;
 	private Operators operators;
-	private HashMap<Integer, Account> bracketsAccount;
+	public HashMap<Integer, Account> bracketsAccount;
 	public AccountState state;
 	private Account owner;
 
-	public Account() {
-		state = AccountState.ORIGINAL;
-		numbers = new Numbers();
-		operators = new Operators();
-	}
-
 	public Account(boolean subAccount) {
+		state = AccountState.ORIGINAL;
 		if (subAccount) {
 			state = AccountState.OPEN;
 		}
+		numbers = new Numbers();
+		operators = new Operators();
+		bracketsAccount = new HashMap<>();
 	}
 
 	public boolean isComplete() {
@@ -40,7 +38,7 @@ public class Account {
 						if (state == AccountState.CLOSED) {
 							toReturn.append(")");
 						}
-						toReturn.append(operators.getOperator(i + 1));
+						toReturn.append(operators.getOperator(i));
 						operatorDisplacement++;
 					}
 				}
@@ -59,6 +57,7 @@ public class Account {
 	}
 
 	public void addOperator(String operator) {
+		//TODO: Solve it with recursion (also the addNumber();)
 		if (numbers.size() > operators.size()) {
 			operators.add(operator);
 			return;
@@ -91,15 +90,25 @@ public class Account {
 		// you're always at the first OPEN bracketsAccount
 		if (bracketsAccount != null) {
 			for (int i = 0; i < numbers.size(); i++) {
+				if(bracketsAccount.get(i) != null) {
 				if (bracketsAccount.get(i).state == AccountState.OPEN) {
 					return bracketsAccount.get(i).getCurrentAccount();
+				}
 				}
 			}
 		}
 		return this;
 	}
 	
+	
 	public void AddOpeningBrackets() {
+		getCurrentAccount().bracketsAccount.put(size()-1, new Account(true));
+	}
+	
+	public void AddClosingBrackets() {
+		if(getCurrentAccount().state == AccountState.OPEN) {
+			getCurrentAccount().state = AccountState.CLOSED;
+		}
 		
 	}
 	
