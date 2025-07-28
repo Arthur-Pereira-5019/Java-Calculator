@@ -10,10 +10,12 @@ public class Account {
 	public AccountState state;
 	private Account owner;
 
-	public Account(boolean subAccount) {
+	public Account(boolean subAccount, Account owner) {
 		state = AccountState.ORIGINAL;
 		if (subAccount) {
 			state = AccountState.OPEN;
+			this.owner = owner;
+			index = this.owner.accountSize()-1;
 		}
 		numbers = new Numbers();
 		operators = new Operators();
@@ -72,15 +74,19 @@ public class Account {
 		if(getCurrentAccount().state == AccountState.ORIGINAL && numbers.isNull() && bracketsAccount.isEmpty()) {
 			return;
 		}
+		if(getSubAccountAt() != null) {
+			getSubAccountAt().state = AccountState.OPEN;
+			return;
+		}
 		if (getCurrentAccount().size() == 0 && getCurrentAccount().state != AccountState.ORIGINAL) {
-			deleteSelf();
+			getCurrentAccount().deleteSelf();
 			return;
 		}
 		if (isCreatingNumber()) {
-			numbers.trimming();
+			getNumbers().trimming();
 			return;
 		}
-		operators.remove(operators.size() - 1);
+		getOperators().removeLast();
 	}
 	
 
@@ -105,10 +111,15 @@ public class Account {
 		return this;
 	}
 	
+	private Account getSubAccountAt() {
+		//Used to work with Closed Account
+		return getCurrentAccount().bracketsAccount.get(getCurrentAccount().size()-1);
+	}
+	
 	
 	public void AddOpeningBrackets() {
 		//Maybe size should consider the number of brackets too
-		getCurrentAccount().bracketsAccount.put(size()-1, new Account(true));
+		getCurrentAccount().bracketsAccount.put(accountSize()-1, new Account(true,this));
 	}
 	
 	public void AddClosingBrackets() {
@@ -182,6 +193,10 @@ public class Account {
 	private int size() {
 		return numbers.size();
 	}
+	
+	private int accountSize() {
+		return numbers.size() + bracketsAccount.size();
+	}
 
 	public int numbersSize() {
 		return numbers.size();
@@ -196,7 +211,15 @@ public class Account {
 	}
 
 	private boolean isCreatingNumber() {
-		return numbers.size() > operators.size();
+		return getNumbers().size() > getOperators().size();
+	}
+	
+	private Numbers getNumbers() {
+		return getCurrentAccount().numbers;
+	}
+	
+	private Operators getOperators() {
+		return getCurrentAccount().operators;
 	}
 
 }

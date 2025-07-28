@@ -80,11 +80,11 @@ public class Menu extends Calculator implements ActionListener{
 	}
 	
 	void buildTheButtons() {
-		for (JButton botao : buttons) {
-			botao.addActionListener(new ActionListener() {
+		for (JButton button : buttons) {
+			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e ) {
-					manipulateNumbers(botao.getText());
+					manipulateNumbers(button.getText());
 					display.setText(showTheCalculation());
 					calc.repaint();
 				}

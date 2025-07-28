@@ -43,7 +43,10 @@ public class Operators implements AccountDataInterface{
 	@Override
 	public void remove(int pos) {
 		operators.remove(pos);
-		
+	}
+	
+	public void removeLast() {
+		operators.remove(size()-1);
 	}
 
 	@Override
