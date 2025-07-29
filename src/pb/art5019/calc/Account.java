@@ -15,7 +15,7 @@ public class Account {
 		if (subAccount) {
 			state = AccountState.OPEN;
 			this.owner = owner;
-			index = this.owner.accountSize() - 1;
+			index = this.owner.accountSize();
 		}
 		numbers = new Numbers();
 		operators = new Operators();
@@ -23,32 +23,30 @@ public class Account {
 	}
 
 	public boolean isComplete() {
-		return numbers.size() + bracketsAccount.size() > operators.size();
+		return accountSize() > operators.size();
 	}
 
 	public String toString() {
 		StringBuilder toReturn = new StringBuilder();
-		int operatorDisplacement = 0;
-		
+		int numberPointer = 0;
 		for (int i = 0; i < accountSize(); i++) {
 			if (bracketsAccount.containsKey(i)) {
 				toReturn.append("(" + bracketsAccount.get(i));
 				if (bracketsAccount.get(i).state == AccountState.CLOSED) {
 					toReturn.append(")");
 				}
-				if (operators.exists(i + 1 )) {
-					toReturn.append(operators.getOperator(i + 1));
+			} else {
+				if (numbers.exists(numberPointer)) {
+					toReturn.append(numbers.getDisplay(numberPointer));
 				}
-				operatorDisplacement++;
-			} else if (numbers.exists(i)) {
-				toReturn.append(numbers.getDisplay(i));
+				numberPointer++;
 			}
 			if (operators.exists(i)) {
 				toReturn.append(operators.getOperator(i));
 			}
-			
+
 		}
-		
+
 		return toReturn.toString();
 	}
 
@@ -73,19 +71,24 @@ public class Account {
 		if (getCurrentAccount().state == AccountState.ORIGINAL && numbers.isNull() && bracketsAccount.isEmpty()) {
 			return;
 		}
-		if (getSubAccountAt() != null) {
-			getSubAccountAt().state = AccountState.OPEN;
-			return;
-		}
 		if (getCurrentAccount().size() == 0 && getCurrentAccount().state != AccountState.ORIGINAL) {
 			getCurrentAccount().deleteSelf();
 			return;
 		}
-		if (isCreatingNumber()) {
+		if(!getCurrentAccount().isComplete()) {
+			getOperators().removeLast();
+			return;
+		}
+		if (getSubAccountAt() != null) {
+			getSubAccountAt().state = AccountState.OPEN;
+			return;
+		}
+		if (getCurrentAccount().isCreatingNumber()) {
 			getNumbers().trimming();
 			return;
 		}
-		getOperators().removeLast();
+		
+
 	}
 
 	public void setFloat() {
@@ -107,8 +110,8 @@ public class Account {
 	}
 
 	private Account getSubAccountAt() {
-		// Used to work with Closed Account
-		return getCurrentAccount().bracketsAccount.get(getCurrentAccount().size());
+		// Used to get Closed Account
+		return getCurrentAccount().bracketsAccount.get(getCurrentAccount().accountSize()-1);
 	}
 
 	public void AddOpeningBrackets() {
@@ -125,15 +128,14 @@ public class Account {
 
 	public String calculate() {
 		while (operators.size() > 0) {
-			if (bracketsAccount == null || bracketsAccount.size() == 0) {
+			if (bracketsAccount.size() == 0) {
 				System.out.println(toString());
 				performCalculations();
-
 			} else {
-				for (int i = 0; i < numbers.size(); i++) {
+				for (int i = 0; i < accountSize(); i++) {
 					if (bracketsAccount.containsKey(i)) {
 						Double result = Double.valueOf(bracketsAccount.get(i).calculate());
-						numbers.insertReorder(i + 1, result);
+						numbers.insertReorder(i, result);
 						bracketsAccount.remove(i);
 					}
 				}
