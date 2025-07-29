@@ -36,6 +36,8 @@ public class Calculator implements Mathematics {
 			baseAccount.AddOpeningBrackets();
 		} else if(button == ")") {
 			baseAccount.AddClosingBrackets();
+		} else if(button == "C") {
+			baseAccount.debugBrackets();
 		}else {
 			baseAccount.getCurrentAccount().addNumber(button);			
 		}

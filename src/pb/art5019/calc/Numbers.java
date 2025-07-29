@@ -27,6 +27,10 @@ public class Numbers implements AccountDataInterface{
 		
 	}
 	
+	public boolean exists(int pos) {
+		return size() >= pos + 1;
+	}
+	
 	public void set(int pos, String set) {
 		Double newSet = Double.valueOf(set);
 		numbers.set(pos, newSet);

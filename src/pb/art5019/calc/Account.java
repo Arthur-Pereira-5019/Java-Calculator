@@ -15,7 +15,7 @@ public class Account {
 		if (subAccount) {
 			state = AccountState.OPEN;
 			this.owner = owner;
-			index = this.owner.accountSize()-1;
+			index = this.owner.accountSize() - 1;
 		}
 		numbers = new Numbers();
 		operators = new Operators();
@@ -29,52 +29,51 @@ public class Account {
 	public String toString() {
 		StringBuilder toReturn = new StringBuilder();
 		int operatorDisplacement = 0;
-		for (int i = 0; i < numbers.size(); i++) {
-			// toReturn.append("["+i+"]");
-			toReturn.append(numbers.getDisplay(i));
-			if (operators.exists(i + operatorDisplacement)) {
-				toReturn.append(operators.getOperator(i + operatorDisplacement));
-				if (bracketsAccount != null) {
-					if (bracketsAccount.containsKey(i)) {
-						toReturn.append("(" + bracketsAccount.get(i));
-						if (bracketsAccount.get(i).state == AccountState.CLOSED) {
-							toReturn.append(")");
-						}
-						if(operators.exists(i+1)) {
-							toReturn.append(operators.getOperator(i+i));
-						}
-						operatorDisplacement++;
-					}
+		
+		for (int i = 0; i < accountSize(); i++) {
+			if (bracketsAccount.containsKey(i)) {
+				toReturn.append("(" + bracketsAccount.get(i));
+				if (bracketsAccount.get(i).state == AccountState.CLOSED) {
+					toReturn.append(")");
 				}
+				if (operators.exists(i + 1 )) {
+					toReturn.append(operators.getOperator(i + 1));
+				}
+				operatorDisplacement++;
+			} else if (numbers.exists(i)) {
+				toReturn.append(numbers.getDisplay(i));
 			}
+			if (operators.exists(i)) {
+				toReturn.append(operators.getOperator(i));
+			}
+			
 		}
+		
 		return toReturn.toString();
-
 	}
 
 	public void addNumber(String number) {
 		if (!isCreatingNumber()) {
-			getCurrentAccount().numbers.add(number);
+			getNumbers().add(number);
 			return;
 		}
-		getCurrentAccount().numbers.insert(numbersSize() - 1, number);
+		getNumbers().insert(getNumbers().size() - 1, number);
 	}
 
 	public void addOperator(String operator) {
-		int i = bracketsAccount.size();;
-		if (numbers.size() + i > operators.size()) {
-			operators.add(operator);
+		int i = bracketsAccount.size();
+		if (getNumbers().size() + i > getOperators().size()) {
+			getOperators().add(operator);
 			return;
 		}
-		operators.set(operators.size(), operator);
+		getOperators().set(getOperators().size() - 1, operator);
 	}
-	
 
 	public void delete() {
-		if(getCurrentAccount().state == AccountState.ORIGINAL && numbers.isNull() && bracketsAccount.isEmpty()) {
+		if (getCurrentAccount().state == AccountState.ORIGINAL && numbers.isNull() && bracketsAccount.isEmpty()) {
 			return;
 		}
-		if(getSubAccountAt() != null) {
+		if (getSubAccountAt() != null) {
 			getSubAccountAt().state = AccountState.OPEN;
 			return;
 		}
@@ -88,47 +87,41 @@ public class Account {
 		}
 		getOperators().removeLast();
 	}
-	
 
 	public void setFloat() {
-		numbers.setFloat(numbersSize()-1);
+		numbers.setFloat(numbersSize() - 1);
 	}
-	
 
 	public Account getCurrentAccount() {
-		// By definition, there can't be two open parenthesis at the same level, and also
-		// you won't be halfway at a close Account,
+		// By definition, there can't be two open parenthesis at the same level, and
+		// also you won't be halfway at a close Account,
 		// you're always at the first OPEN bracketsAccount
-		if (bracketsAccount != null) {
-			for (int i = 0; i < numbers.size(); i++) {
-				if(bracketsAccount.get(i) != null) {
+		for (int i = 0; i < accountSize(); i++) {
+			if (bracketsAccount.get(i) != null) {
 				if (bracketsAccount.get(i).state == AccountState.OPEN) {
 					return bracketsAccount.get(i).getCurrentAccount();
-				}
 				}
 			}
 		}
 		return this;
 	}
-	
+
 	private Account getSubAccountAt() {
-		//Used to work with Closed Account
-		return getCurrentAccount().bracketsAccount.get(getCurrentAccount().size()-1);
+		// Used to work with Closed Account
+		return getCurrentAccount().bracketsAccount.get(getCurrentAccount().size());
 	}
-	
-	
+
 	public void AddOpeningBrackets() {
-		//Maybe size should consider the number of brackets too
-		getCurrentAccount().bracketsAccount.put(accountSize()-1, new Account(true,this));
+		// Maybe size should consider the number of brackets too
+		getCurrentAccount().bracketsAccount.put(getCurrentAccount().accountSize(), new Account(true, this));
 	}
-	
+
 	public void AddClosingBrackets() {
-		if(getCurrentAccount().state == AccountState.OPEN) {
+		if (getCurrentAccount().state == AccountState.OPEN) {
 			getCurrentAccount().state = AccountState.CLOSED;
 		}
-		
+
 	}
-	
 
 	public String calculate() {
 		while (operators.size() > 0) {
@@ -193,7 +186,7 @@ public class Account {
 	private int size() {
 		return numbers.size();
 	}
-	
+
 	private int accountSize() {
 		return numbers.size() + bracketsAccount.size();
 	}
@@ -211,15 +204,24 @@ public class Account {
 	}
 
 	private boolean isCreatingNumber() {
-		return getNumbers().size() > getOperators().size();
+		return accountSize() > getOperators().size();
 	}
-	
+
 	private Numbers getNumbers() {
 		return getCurrentAccount().numbers;
 	}
-	
+
 	private Operators getOperators() {
 		return getCurrentAccount().operators;
+	}
+
+	public void debugBrackets() {
+		System.out.println(accountSize());
+		for (int i = 0; i < accountSize(); i++) {
+			if (bracketsAccount.get(i) != null) {
+				System.out.println(bracketsAccount.get(i) + " " + i);
+			}
+		}
 	}
 
 }
