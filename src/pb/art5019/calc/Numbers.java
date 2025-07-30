@@ -32,6 +32,10 @@ public class Numbers implements AccountDataInterface{
 	}
 	
 	public void set(int pos, String set) {
+		if(set.isEmpty()) {
+			numbers.remove(pos);
+			return;
+		}
 		Double newSet = Double.valueOf(set);
 		numbers.set(pos, newSet);
 	}
@@ -62,6 +66,8 @@ public class Numbers implements AccountDataInterface{
 	
 	public void remove(int pos) {
 		numbers.remove(pos);
+		dotMarkers.remove(pos);
+		firstDecimal.remove(pos);
 	}
 	
 	public int size() {
@@ -115,14 +121,30 @@ public class Numbers implements AccountDataInterface{
 	}
 	
 	public void trimElement(int pos) {
-		set(pos, getBeforeDot(pos).substring(0,getBeforeDot(pos).length()-1));
+		String base = getString(pos);
+		String toSet;
+		if(base.substring(base.length()-2,base.length()).equals(".0")) {
+			toSet = base.substring(0,base.length()-3);
+		} else {
+			toSet = base.substring(0,base.length()-1);
+		}
+		if(toSet.equals("-")) {
+			toSet = toSet.replace("-", "");
+		}
+		if(isInteger(Double.valueOf(toSet))) {
+			dotMarkers.set(pos, false);
+			firstDecimal.set(pos, false);
+		}
+		set(pos, toSet);
+		
 	}
 	
 	public void trimming() {
-		if(getBeforeDot((size()-1)).length() > 1) {
-			trimElement(size()-1);
+		int p = size()-1;
+		if(getString(p).length() > 3) {
+			trimElement(p);
 		}else {
-			remove(size()-1);
+			remove(p);
 		}
 	}
 	

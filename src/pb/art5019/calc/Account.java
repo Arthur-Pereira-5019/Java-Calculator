@@ -51,7 +51,7 @@ public class Account {
 	}
 
 	public void addNumber(String number) {
-		if (!isCreatingNumber()) {
+		if (!getCurrentAccount().isCreatingNumber()) {
 			getNumbers().add(number);
 			return;
 		}
@@ -87,12 +87,17 @@ public class Account {
 			getNumbers().trimming();
 			return;
 		}
-		
 
+	}
+	
+	public void clear() {
+		while(getCurrentAccount().state != AccountState.ORIGINAL || !numbers.isNull() || !bracketsAccount.isEmpty()) {
+			delete();
+		}
 	}
 
 	public void setFloat() {
-		numbers.setFloat(numbersSize() - 1);
+		getNumbers().setFloat(numbersSize() - 1);
 	}
 
 	public Account getCurrentAccount() {
@@ -120,14 +125,14 @@ public class Account {
 	}
 
 	public void AddClosingBrackets() {
-		if (getCurrentAccount().state == AccountState.OPEN) {
+		if (getCurrentAccount().state == AccountState.OPEN && getCurrentAccount().isComplete()) {
 			getCurrentAccount().state = AccountState.CLOSED;
 		}
 
 	}
 
 	public String calculate() {
-		while (operators.size() > 0) {
+		while (operators.size() > 0 || bracketsAccount.size() > 0) {
 			if (bracketsAccount.size() == 0) {
 				System.out.println(toString());
 				performCalculations();
@@ -216,6 +221,7 @@ public class Account {
 	private Operators getOperators() {
 		return getCurrentAccount().operators;
 	}
+	
 
 	public void debugBrackets() {
 		System.out.println(accountSize());
