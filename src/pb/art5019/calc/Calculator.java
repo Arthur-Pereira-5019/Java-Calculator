@@ -1,6 +1,8 @@
 
 package pb.art5019.calc;
 
+import java.awt.Desktop;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,8 @@ public class Calculator implements Mathematics {
 	Numbers numbers = new Numbers();
 	boolean isCreatingNumber = false;
 	int operation = 0;
-	HistoryRepository hr = new HistoryRepository("data/history.txt");
+	static HistoryRepository hr = new HistoryRepository("data/history.txt");
+	Desktop desktop = Desktop.getDesktop();
 	
 	Account baseAccount;
 
@@ -43,19 +46,14 @@ public class Calculator implements Mathematics {
 		}
 		
 	}
-
-	private void addBrackets(String button) {
-		if(operators.size() == numbers.size()) {
-			if(button == "(") {
-				operators.add(button);
-				return;
-			}
-		}else if(operators.size() < numbers.size()) {
-			if(button == ")") {
-				operators.add(button);
-				return;
-			}
+	
+	public void openHistory() {
+		try {
+			desktop.open(hr.getFile());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
 	}
 	
 	

@@ -42,16 +42,17 @@ public class Numbers implements AccountDataInterface{
 	
 	public void set(int pos, String set, boolean isCalculation) {
 		Double newSet = Double.valueOf(set);
-		if(isCalculation && numbers.size() == 1) {
-			resetFloatStructure();
-			dotMarkers.add(false);
-			firstDecimal.add(false);
-			if(isInteger(newSet)) {
-				dotMarkers.add(true);
-				firstDecimal.add(true);
-			}
+		System.out.println(newSet);
+		if(isCalculation && size() == 2) {
+			
+		}
+		if(!isInteger(newSet)) {
+			dotMarkers.set(pos, true);
+			firstDecimal.set(pos, true);
+			newSet = treatDouble(newSet);
 		}
 		numbers.set(pos, newSet);
+		
 	}
 	
 	public void getList() {
@@ -173,6 +174,8 @@ public class Numbers implements AccountDataInterface{
 	public void resetFloatStructure() {
 		dotMarkers.clear();
 		firstDecimal.clear();
+		dotMarkers.add(false);
+		firstDecimal.add(false);
 	}
 	
 	public void insertReorder(int pos, double toAdd) {
@@ -185,6 +188,15 @@ public class Numbers implements AccountDataInterface{
 			firstDecimal.set(i+1, firstDecimal.get(i));
 		}
 		numbers.set(pos, toAdd);
+	}
+	
+	private Double treatDouble(Double d) {
+		String dS = d.toString();
+		int dP = dS.indexOf(dS);
+		if(dS.substring(dP,dS.length()).length() > 6) {
+			return Double.valueOf(dS.substring(dP,dP+7));
+		}
+		return d;
 	}
 
 

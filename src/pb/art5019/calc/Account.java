@@ -9,7 +9,7 @@ public class Account {
 	public HashMap<Integer, Account> bracketsAccount;
 	public AccountState state;
 	private Account owner;
-
+	
 	public Account(boolean subAccount, Account owner) {
 		state = AccountState.ORIGINAL;
 		if (subAccount) {
@@ -132,9 +132,9 @@ public class Account {
 	}
 
 	public String calculate() {
+		String calculation = toString();
 		while (operators.size() > 0 || bracketsAccount.size() > 0) {
 			if (bracketsAccount.size() == 0) {
-				System.out.println(toString());
 				performCalculations();
 			} else {
 				for (int i = 0; i < accountSize(); i++) {
@@ -146,6 +146,8 @@ public class Account {
 				}
 			}
 		}
+		String result = numbers.getString(0);
+		Calculator.hr.write(calculation, result);
 		return numbers.getString(0);
 	}
 
@@ -199,7 +201,7 @@ public class Account {
 	}
 
 	public int numbersSize() {
-		return numbers.size();
+		return getNumbers().size();
 	}
 
 	public Account getOwner() {

@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Menu extends Calculator implements ActionListener{
+public class Menu extends Calculator{
 	JFrame calc = new JFrame("Art5019's Calculator");
 	List<JButton> buttons = new ArrayList<>();
 	int nextJump = 0;
@@ -19,6 +19,7 @@ public class Menu extends Calculator implements ActionListener{
 	String toDisplay = "Welcome to Art5019's Calculator";
 	boolean isCreatingNumber = false;
 	JLabel display = new JLabel();
+	JButton save;
 	
 	List<Character> operands = new ArrayList<>();
 
@@ -61,7 +62,6 @@ public class Menu extends Calculator implements ActionListener{
 				nextJump = 4;
 			}
 			buttons.get(i).setBounds(20+column*90,80+row*80,80,75);
-			buttons.get(i).addActionListener(this);
 			calc.add(buttons.get(i));
 			nextJump--;
 		}
@@ -70,13 +70,14 @@ public class Menu extends Calculator implements ActionListener{
 		calc.add(display);	
 		calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		calc.setSize(400,600);
-		JButton save = new JButton("History");
+		save = new JButton("History");
 		save.setBounds(calc.getWidth()-100, 0, 90, 60);
 		calc.add(save);
 		calc.setLayout(null);
 		calc.setVisible(true);
 		calc.setResizable(false);
 		calc.setLocationRelativeTo(null);
+
 	}
 	
 	void buildTheButtons() {
@@ -90,12 +91,16 @@ public class Menu extends Calculator implements ActionListener{
 				}
 			});
 		}
-	}
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
+		
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openHistory();
+			}
+		});
 		
 	}
+	
+
 
 }
